@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 RAW_DIR=/home/vanton/magali/01_raw_data/
 
 mkdir –p 02_raw_data_quality
