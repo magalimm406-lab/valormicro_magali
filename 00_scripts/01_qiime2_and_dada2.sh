@@ -13,7 +13,7 @@ conda activate qiime2-amplicon-2026.1
 ############################
 
 # Dossier racine du projet 
-PROJECT_DIR="/home/vanton/magali/valormicro_stage"
+PROJECT_DIR="/home/vanton/magali/valormicro_magali"
 
 # Dossier contenant les fastq nettoyés (outputs de Trimmomatic)
 CLEAN_DIR="${PROJECT_DIR}/03_cleaned_data"
