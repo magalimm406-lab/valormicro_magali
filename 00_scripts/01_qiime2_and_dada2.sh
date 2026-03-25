@@ -1,28 +1,8 @@
 #!/usr/bin/env bash
 
-###############################################################################
-# Script QIIME2 pour Magali - pipeline import -> DADA2 sur données 16S
-# Auteur : Pierre-Louis Stenger
-# Objectif : Présenter toutes les étapes pour que ça fonction dans dans le dossier "pl" et pour que tu puisses l'adapter dans ton propre répertoire (magali).
-#
-# Ce script suppose la structure suivante dans ton répertoire :
-#   /home/vanton/pl/valormicro_stage (ou /home/vanton/magali/valormicro_magali)
-#     ├── 00_scripts
-#     ├── 01_raw_data
-#     ├── 02_raw_data_quality
-#     ├── 03_cleaned_data           (résultats Trimmomatic, paired + unpaired)
-#     ├── 04_cleaned_data_quality
-#     └── README.md
-#
-# Tu devras donc :
-#   - copier ce script dans ton dossier 00_scripts dans ton github
-#   - modifier tous les chemins commençant par /home/vanton/pl/valormicro_stage... pour /home/vanton/magali/valormicro_magali
-#   - vérifier que les noms de fichiers fastq correspondent bien aux tiens
-###############################################################################
-
-############################
+########################
 # 0. Activation QIIME2
-############################
+########################
 
 # On active l'environnement conda qui contient QIIME2.
 source /home/vanton/miniconda3/etc/profile.d/conda.sh
@@ -32,8 +12,8 @@ conda activate qiime2-amplicon-2026.1
 # 1. Définition des chemins
 ############################
 
-# Dossier racine du projet de pl
-PROJECT_DIR="/home/vanton/pl/valormicro_stage"
+# Dossier racine du projet 
+PROJECT_DIR="/home/vanton/magali/valormicro_stage"
 
 # Dossier contenant les fastq nettoyés (outputs de Trimmomatic)
 CLEAN_DIR="${PROJECT_DIR}/03_cleaned_data"
@@ -51,9 +31,9 @@ mkdir -p "${MANIFEST_DIR}"
 mkdir -p "${METADATA_DIR}"
 mkdir -p "${QIIME_OUT_DIR}"
 
-############################
+###############################
 # 2. Construction des manifests
-############################
+###############################
 # QIIME2 a besoin de "manifest" pour savoir :
 #   - quel est le sample-id
 #   - où se trouvent les fichiers R1 et R2
@@ -110,9 +90,9 @@ for R1 in "${CLEAN_DIR}"/*_R1_001.paired.fastq.gz; do
     fi
 done
 
-############################
+###################################
 # 3. Création d’un fichier metadata
-############################
+###################################
 # QIIME2 a besoin d’un "metadata" (tableau tabulé ou CSV) pour l’annotation
 # des samples (ex : type d’échantillon, site, condition, etc.).
 # Ici on va créer un squelette minimal que Magali devra compléter.
@@ -141,9 +121,9 @@ done >> "${METADATA_MAIN}"
 echo "Metadata principal créé : ${METADATA_MAIN}"
 echo "IMPORTANT : Magali doit éditer ce fichier (group, comment, etc.)."
 
-############################
+###################################
 # 4. Import des données dans QIIME2
-############################
+###################################
 # On va importer les données en tant que :
 #   --type 'SampleData[PairedEndSequencesWithQuality]'
 #   --input-format PairedEndFastqManifestPhred33V2 [web:35][web:39]
@@ -170,9 +150,15 @@ qiime tools import \
   --output-path "${DEMUX_TNEG_QZA}" \
   --input-format PairedEndFastqManifestPhred33
 
-############################
+##nano metadata_main.tsv
+#modifier les TODO_group et les TODO_comment 
+#Dans nano :
+#Ctrl + O → Entrée (sauvegarder)
+#Ctrl + X → quitter
+
+#####################################################
 # 5. Résumé du demultiplexage (qiime demux summarize)
-############################
+#####################################################
 # Cette étape permet d’obtenir des visualisations (fichiers .qzv)
 # pour inspecter la distribution des tailles, des qualités, etc.
 
@@ -243,9 +229,9 @@ qiime dada2 denoise-paired \
   --o-denoising-stats "${STATS_TNEG_QZA}" \
   --o-base-transition-stats "${BASETRANS_TNEG_QZA}"
 
-############################
+#####################################
 # 7. Visualisations des outputs DADA2
-############################
+#####################################
 # On génère les .qzv associés à la table, aux séquences représentatives
 # et aux stats de denoising pour pouvoir les explorer dans QIIME2 View.
 
