@@ -263,6 +263,7 @@ qiime feature-table summarize \
 TABLE_MAIN_QZV="${QIIME_OUT_DIR}/table_main.qzv"
 REP_SEQS_MAIN_QZV="${QIIME_OUT_DIR}/rep_seqs_main.qzv"
 STATS_MAIN_QZV="${QIIME_OUT_DIR}/dada2_stats_main.qzv"
+REP_SEQS_TNEG_QZV="${QIIME_OUT_DIR}/rep_seqs_Tneg.qzv"
 
 qiime feature-table summarize \
   --i-table "${TABLE_MAIN_QZA}" \
@@ -272,6 +273,10 @@ qiime feature-table summarize \
 qiime feature-table tabulate-seqs \
   --i-data "${REP_SEQS_MAIN_QZA}" \
   --o-visualization "${REP_SEQS_MAIN_QZV}"
+
+qiime feature-table tabulate-seqs \
+  --i-data "${REP_SEQS_TNEG_QZA}" \
+  --o-visualization "${REP_SEQS_TNEG_QZV}"
 
 qiime metadata tabulate \
   --m-input-file "${STATS_MAIN_QZA}" \
