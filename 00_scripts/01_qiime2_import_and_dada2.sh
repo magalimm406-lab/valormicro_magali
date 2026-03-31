@@ -221,8 +221,8 @@ qiime dada2 denoise-paired \
   --i-demultiplexed-seqs "${DEMUX_TNEG_QZA}" \
   --p-trim-left-f 0 \
   --p-trim-left-r 0 \
-  --p-trunc-len-f 0 \
-  --p-trunc-len-r 0 \
+  --p-trunc-len-f 250 \
+  --p-trunc-len-r 200 \
   --p-n-threads 0 \
   --o-table "${TABLE_TNEG_QZA}" \
   --o-representative-sequences "${REP_SEQS_TNEG_QZA}" \
