@@ -282,6 +282,47 @@ qiime metadata tabulate \
   --m-input-file "${STATS_MAIN_QZA}" \
   --o-visualization "${STATS_MAIN_QZV}"
 
+########################################
+# 8. Retrait des ASV des témoins
+########################################
+#On enlève dans la table principale "main" les ASV des Tneg
+#
+# On utilise directement :
+# - la table Tneg pour filtrer les séquences (.qza)
+# - les rep_seqs_Tneg comme liste d'IDs d'ASV (.qza)
+
+TABLE_MAIN_NOTNEG_QZA="${QIIME_OUT_DIR}/table_main_noTneg.qza"
+REP_SEQS_MAIN_NOTNEG_QZA="${QIIME_OUT_DIR}/rep_seqs_main_noTneg.qza"
+
+qiime feature-table filter-seqs \
+--i-data "${REP_SEQS_MAIN_QZA}" \
+--i-table "${TABLE_TNEG_QZA}" \
+--p-exclude-ids \
+--o-filtered-data "${REP_SEQS_MAIN_NOTNEG_QZA}"
+
+qiime feature-table filter-features \
+--i-table "${TABLE_MAIN_QZA}" \
+--m-metadata-file "${REP_SEQS_TNEG_QZA}" \
+--p-exclude-ids \
+--o-filtered-table "${TABLE_MAIN_NOTNEG_QZA}"
+
+########################################
+# 9. Visualisation du main sans Tneg
+########################################
+
+TABLE_MAIN_NOTNEG_QZV="${QIIME_OUT_DIR}/table_main_noTneg.qzv"
+REP_SEQS_MAIN_NOTNEG_QZV="${QIIME_OUT_DIR}/rep_seqs_main_noTneg.qzv"
+
+qiime feature-table summarize \
+--i-table "${TABLE_MAIN_NOTNEG_QZA}" \
+--o-visualization "${TABLE_MAIN_NOTNEG_QZV}" \
+--m-sample-metadata-file "${METADATA_MAIN}"
+
+qiime feature-table tabulate-seqs \
+--i-data "${REP_SEQS_MAIN_NOTNEG_QZA}" \
+--o-visualization "${REP_SEQS_MAIN_NOTNEG_QZV}"
+
+
 echo "Pipeline QIIME2 terminé."
 echo "Résultats dans : ${QIIME_OUT_DIR}"
 echo "Manifest dans : ${MANIFEST_DIR}"
